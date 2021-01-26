@@ -1,4 +1,5 @@
 <template>
+  <p v-if="loading">Loading...</p>
   <h1>Jobs</h1>
   <div v-for="job in jobs" :key="job.id" class="job">
     <router-link :to="{ name: 'JobDetails', params: { id: job.id } }">
@@ -11,12 +12,14 @@
 export default {
   data() {
     return {
-      jobs: [
-        { title: 'Ux', id: 1, details: 'lorem' },
-        { title: 'Developer', id: 2, details: 'lorem' },
-        { title: 'Designer', id: 3, details: 'lorem' }
-      ]
+      jobs: [],
+      loading: true
     }
+  },
+  async mounted() {
+    const response = await fetch('http://localhost:3000/jobs')
+    this.jobs = await response.json()
+    this.loading = false
   }
 }
 </script>
